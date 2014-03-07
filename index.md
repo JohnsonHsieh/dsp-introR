@@ -1,8 +1,8 @@
 ---
-title       : 第一次學R就上手
+title       : 第一次學 R 就上手
 subtitle    : 
 author      : Johnson Hsieh (謝宗震)
-job         : Postdoctoral Reseracher in Biostatistics at NTHU
+job         : DSP團訓班2
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : zenburn       # 
@@ -19,10 +19,10 @@ mode        : selfcontained # {standalone, draft}
 
 ## Links To Slides
 ### Link to all slides
-https://github.com/JohnsonHsieh/DSR_workshop/blob/gh-pages/index.Rmd
+http://JohnsonHsieh.github.com/dsp-introR
 
 ### Source code on github
-https://github.com/JohnsonHsieh/DSR_workshop/blob/gh-pages/index.Rmd
+http://github.com/JohnsonHsieh/dsp-introR/blob/gh-pages/index.Rmd
 
 --- .segue .dark
 ## Installing R and Packages
