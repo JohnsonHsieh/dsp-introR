@@ -136,6 +136,7 @@ as.character(a) #"10"
 - 讀進來的R object 稱作 data.frame
 
 ```r
+# dat <- read.csv("http://johnsonhsieh.github.io/dsp-introR/data/hsb.csv")
 dat <- read.csv("data/hsb.csv")
 head(dat) # first few rows
 ```
@@ -397,6 +398,7 @@ cbind(dim(dat.female), dim(dat.male),dim(dat.both))
 
 ```r
 # Windows
+# f <- file("http://johnsonhsieh.github.io/dsp-introR/data/dsp-gift-2013-big5/%E8%B2%B7%E8%B3%A3st_A_10109_10109.csv", encoding="big5")
 # f <- file("data/dsp-gift-2013-big5/買賣st_A_10109_10109.csv", encoding="big5")
 # Mac, Linux
 f <- file("data/dsp-gift-2013-utf8/買賣st_A_10109_10109.csv", encoding="UTF-8-BOM")
