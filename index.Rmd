@@ -79,7 +79,7 @@ install.packages("rpart.plot") # Fancy tree plot
 install.packages("RColorBrewer") # Nice color palettes
 
 # Loading Packages
-library(ElemStatLearn, pos=)
+library(ElemStatLearn)
 library(Hmisc)
 library(rpart) 
 library(rpart.plot) 
