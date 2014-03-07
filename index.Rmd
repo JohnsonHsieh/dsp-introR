@@ -1,0 +1,384 @@
+---
+title       : 第一次學R就上手
+subtitle    : 
+author      : Johnson Hsieh (謝宗震)
+job         : Postdoctoral Reseracher in Biostatistics at NTHU
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn       # 
+license     : 
+logo        : 
+widgets     : [mathjax, bootstrap, quiz]
+mode        : selfcontained # {standalone, draft}
+
+
+---
+
+```{r setup, include=FALSE,echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 100,digits=3)
+opts_chunk$set(message = FALSE, eval=TRUE,fig.align = "center", warning = FALSE, comment = NA, dpi = 100, fig.width=6, fig.height=4,tidy = FALSE, cache = FALSE)
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Links To Slides
+### Link to all slides
+https://github.com/JohnsonHsieh/DSR_workshop/blob/gh-pages/index.Rmd
+
+### Source code on github
+https://github.com/JohnsonHsieh/DSR_workshop/blob/gh-pages/index.Rmd
+
+--- .segue .dark
+## Installing R and Packages
+
+---
+## R 簡介
+R 是一個程式語言、統計計算與繪圖的整合環境，萌生於貝爾實驗室（Bell Laboratories），主要作者為 John Chambers。其語法與 S 語言（S-Plus）非常相似，提供非常多的統計工具
+
+包含線性與非線性模型（linear and nonlinear modelling）、統計檢定（statistical tests）、時間序列分析（time series analysis）、分類分析（classification）、群集分析（clustering）等相關工具。
+
+---
+## R 的優勢
+- 免費、開放、佔有率高
+- 資源豐富、易於學習
+- 非常靈活、適合開發新方法
+- 開發時程短、不用考慮計算效率
+
+---
+## 下載與安裝
+- R 軟體的官方網站為 http://www.r-project.org 
+- 在子網站 CRAN (http://cran.r-project.org/) 中下載 R 軟體
+- 友善的IDE RStudio http://www.rstudio.com/ide/ (Windows, Mac and Linux)
+
+<img src="http://pluto.huji.ac.il/~msby/StatThink/Screenshots_WinXP/3-R-project-CRAN.PNG", width=40%>
+<img src="https://www.rstudio.com/images/screenshots/rstudio-windows_thumb.png", width=40%>
+
+---
+## 
+<center>
+<img src="http://www.ats.ucla.edu/stat/r/seminars/R.svg", width=80%>
+</center>
+
+---
+## 安裝與載入 R package
+```{r eval=FALSE}
+# Installing Packages
+install.packages('ElemStatLearn', repos='http://cran.csie.ntu.edu.tw/')
+install.packages("Hmisc") # Interaction plot
+install.packages("rpart") # Recursive partitioning
+install.packages("rpart.plot") # Fancy tree plot
+install.packages("RColorBrewer") # Nice color palettes
+
+# Loading Packages
+library(ElemStatLearn, pos=)
+library(Hmisc)
+library(rpart) 
+library(rpart.plot) 
+library(RColorBrewer) 
+```
+
+--- .segue .dark
+## Intro R basic
+
+---
+## 基礎教學
+- Commands 以空行 (newline) 或分號 (;) 區隔
+- R 的指令有大小寫的區分
+- 基本數學運算符號 (+, -, *, /, ^)
+- 井號 (#) 表示註解，使得該行不執行運算
+- 問號 (?) 表示尋求說明檔
+- 箭號 (<-) 表示把右邊的結果 assigned 到 R object
+
+```{r eval=FALSE}
+# Example here
+5 + 5
+1 + 2 + 3 * 4 / (5 - 6)
+x <- 1
+y <- 3
+x + y
+```
+
+---
+## 基礎教學
+- 基本資料結構
+  * 數值 (1, 0.35, 41.2)
+  * 字串 ("男性", "AB")
+  * 邏輯 (TRUE, FALSE)
+- 基本邏輯運算符號 (>, >=, <, <=, ==, not !=, and &, or |)
+```{r eval=FALSE}
+a <- 10; b <- "ten"; c <- "25"; d <- TRUE; e <- FALSE 
+a > 1 # TRUE
+a + b # error
+a + c # error
+d & e # FALSE
+```
+
+---
+## 基礎教學
+- 確認資料結構 (is.) is.character, is.logical, is.numeric, is.na
+- 轉換資料結構 (as.) as.character, as.logical, as.numeric
+```{r eval=FALSE}
+a <- 10; b <- "ten"; c <- "25"; d <- TRUE; e <- FALSE 
+as.numeric(b) # NA
+a + as.numeric(c) # 35
+as.numeric(d) # 1
+as.numeric(e) # 0
+as.character(a) #"10"
+```
+
+---
+## 讀取外部資料
+- read.table, read.csv
+- 讀進來的R object 稱作 data.frame
+```{r}
+dat <- read.csv("data/hsb.csv")
+head(dat) # first few rows
+class(dat) 
+```
+
+---
+## data.frame 介紹
+- 一種類似矩陣 (matrix) 的 R object
+- 個別的行或是列，可以存放數值與類別資料
+- 利用 object[row,column] 提取資料
+```{r}
+dat[1,1]
+dat[2, ]
+dat[, 1]
+```
+
+---
+## data.frame 介紹
+- 可以用向量 (c) 來提取資料
+- 也可以用 object[, "variable"] 或是 object$variable 提取
+```{r}
+dat[c(1, 2, 3, 4), "id"]
+dat$id[1:4]
+dat[1:2, c("id", "sex", "write")]
+```
+
+---
+## data.frame 介紹
+```{r eval=FALSE}
+dim(dat) # [1] 200 11
+```
+```{r}
+str(dat) # show dataset structure
+```
+
+---
+## Basic description
+```{r}
+summary(dat) # show basic description
+```
+
+---
+## Basic description
+```{r}
+c(mean(dat$read), sd(dat$read)) # mean and standard deviation
+score <- dat[, c("read", "write", "math", "science", "socst")]
+cor(score) # correlation
+```
+
+--- .segue .dark
+## Modifying and Managing Data
+
+---
+## Labeling Categorical Vars
+```{r}
+race <- factor(dat$race, 
+               levels = c("Hispanic", "Asian", "African American", "White"), 
+               labels = c("HI", "AS", "AA", "WH"))
+head(race, n=10)
+```
+
+
+--- 
+## Sorting Data
+```{r}
+dat <- dat[order(dat$id, dat$sex), ] # sort data by id and sex
+head(dat)
+```
+
+---
+## Recoding Data
+```{r}
+dat$total <- rowSums(dat[,7:10]) # read + write + math + science
+dat$grade <- cut(dat$total,
+  breaks = c(0, 140, 180, 210, 234, 300),
+  labels = c("F", "D", "C", "B", "A"))
+summary(dat[, c("total", "grade")])
+```
+
+---
+## Merging Data
+- Use rbind or cbind
+```{r}
+dat.female <- dat[dat$sex=="female",]
+dat.male <- dat[dat$sex=="male",]
+dat.both <- rbind(dat.female, dat.male)
+cbind(dim(dat.female), dim(dat.male),dim(dat.both))
+```
+
+--- .segue .dark
+## Analyzing Real Data
+
+---
+## 台北市實價登錄資料
+```{r}
+# Windows
+# f <- file("data/dsp-gift-2013-big5/買賣st_A_10109_10109.csv", encoding="big5")
+# Mac, Linux
+f <- file("data/dsp-gift-2013-utf8/買賣st_A_10109_10109.csv", encoding="UTF-8-BOM")
+tab <- read.csv(f, header=TRUE)
+View(tab)
+names(tab)
+```
+
+
+---
+## Modifying and Managing Data
+```{r}
+tab1 <- tab[, c("鄉鎮市區", "交易標的", "建物型態", "總價.元.", "建物移轉總面積.平方公尺.",
+                   "車位總價.元.", "車位移轉總面積.平方公尺.")]
+names(tab1) <- c("行政區", "交易標的", "建物型態", "總價", "總面積", "車位價", "車位面積")
+# levels(tab1$交易標的); levels(tab1$建物型態)
+tab1$交易標的 <- factor(tab1$交易標的, levels(tab1$交易標的), 
+                           labels=c("車位","房地","房地+車位","建物","土地"))
+tab1$建物型態 <- factor(tab1$建物型態, levels(tab1$建物型態), 
+                           labels=c("商辦","廠辦","店面","公寓","華廈","其他",
+                                    "套房","透天","大樓"))
+head(tab1)
+```
+
+---
+## Modifying and Managing Data
+```{r}
+tab1$房價.萬元 <- (tab1$總價 - tab1$車位價)/10^4
+tab1$建物面積.坪 <- 0.3025*(tab1$總面積 - tab1$車位面積)
+tab2 <- tab1[tab1$交易標的!="車位",]
+tab2 <- tab2[, c("行政區","建物型態","房價.萬元","建物面積.坪")]
+head(tab2)
+```
+
+---
+## Exploratory Data Analysis
+```{r}
+summary(tab2)
+```
+
+---
+## Exploratory Data Analysis
+```{r}
+table(tab2[,1])
+table(tab2[,2])
+```
+
+---
+## Pivot tables
+```{r}
+# install.packages("reshape", repos="http://cran.rstudio.com")
+library(reshape)
+cast(tab2, 建物型態 ~ ., fun.aggregate=mean, value="房價.萬元")
+```
+---
+## Pivot tables
+```{r}
+cast(tab2, 行政區 ~ ., fun.aggregate=table, value="建物型態")
+```
+
+---
+## 小挑戰
+- 請計算台北市各行政區為的平均房價
+- 請計算台北市各行政區各種建物型態的房價中位數
+- Hint: use cast function in reshape package, 中位數函數 median
+
+---
+## Pie Chart and Bar Chart
+```{r, fig.width=8}
+par(family="STHeiti") # Mac 中文字型設定
+par(mfrow=c(1,2)) # 以兩欄顯示圖形
+pie(sort(table(tab2$行政區), decreasing=TRUE))
+barplot(sort(table(tab2$建物型態), decreasing=TRUE), las=2)
+```
+
+---
+## Histogram and denstiy
+```{r, fig.width=8, fig.height=3.5}
+par(family="STHeiti", mfrow=c(1,2)) # Mac 中文字型設定
+id <- tab2$建物型態 == "大樓" | tab2$建物型態 == "華廈" | tab2$建物型態 == "公寓"
+tab3 <- tab2[id, ] # 一般住宅建物
+tab3 <- tab3[tab3$房價.萬元>500, ]
+hist(tab3$建物面積.坪)
+hist(tab3$建物面積.坪, breaks=10, col="lightblue", prob=TRUE)
+lines(density(tab3$建物面積.坪, bw=8), col=2, lwd=2)
+```
+
+---
+## 小挑戰
+- 改變 hist() 函數中的breaks參數，觀察直方圖的變化
+- 改變 density() 函數中的bw參數，觀察機率密度函數的變化
+
+
+---
+```{r, fig.width=8, fig.height=5}
+par(family="STHeiti", mfrow=c(2,2)) # Mac 中文字型設定
+hist(tab3$房價.萬元)
+hist(tab3$建物面積.坪)
+hist(log10(tab3$房價.萬元))
+hist(log10(tab3$建物面積.坪))
+```
+
+---
+```{r, fig.width=8, fig.height=4}
+par(family="STHeiti", mfrow=c(1,2)) # Mac 中文字型設定
+plot(tab3$房價.萬元, tab3$建物面積.坪, xlab="房價(萬元)", ylab="面積(坪)")
+plot(tab3$房價.萬元, tab3$建物面積.坪, xlab="log房價(萬元)", ylab="log面積(坪)", log="xy")
+```
+
+---
+## Regression
+```{r}
+x <- tab3$房價.萬元
+y <- tab3$建物面積.坪
+cor(x, y)
+cor(log10(x), log10(y))
+```
+
+---
+```{r}
+fit <- lm(log10(y) ~ log10(x))
+summary(fit) # log10.y = -0.81 + 0.72*log10.x or y = 0.15 * x^0.72
+```
+
+---
+```{r, fig.width=5, fig.height=5}
+par(family="STHeiti") # Mac 中文字型設定
+plot(x, y, , xlab="房價(萬元)", ylab="面積(坪)", log="xy")
+abline(fit, col=2, lwd=2)
+text(6000, 20, "log10.y = -0.81 + 0.72*log10.x", col=2, cex=1.5)
+```
+
+---
+## Prediction
+```{r}
+new <- data.frame(x = c(500, 800, 1600, 2500, 5000, 8000))
+10^predict(fit, newdata=new)
+```
+
+---
+## References
+- [Introducing R](http://www.ats.ucla.edu/stat/r/seminars/intro.htm), UCLA R seminars
+- [Introduction to R](https://www.datacamp.com/courses/introduction-to-r), DataCamp
+- [R的資料型態](http://rpubs.com/wush978/R_DataType), TW R User Group
+- [R 簡介](http://statlab.nchc.org.tw/rnotes/?page_id=2), R 學習筆記
+- [免費電子書 -- R 統計軟體](http://ccckmit.wikidot.com/r:main), 陳鍾誠的網站
