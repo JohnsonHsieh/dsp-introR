@@ -385,3 +385,16 @@ new <- data.frame(x = c(500, 800, 1600, 2500, 5000, 8000))
 - [R 簡介](http://statlab.nchc.org.tw/rnotes/?page_id=2), R 學習筆記
 - [免費電子書 -- R 統計軟體](http://ccckmit.wikidot.com/r:main), 陳鍾誠的網站
 - [StackOverflow](http://stackoverflow.com/), getting help online
+
+---
+## Homework
+```{r eval=FALSE}
+# Q:男女生考試總分的平均成績誰比較高，高多少分
+# Hint:
+score <- dat[, c("read", "write", "math", 
+                 "science", "socst")]
+mean(dat[dat$sex=="female", "math"])
+mean(dat[dat$sex=="male", "math"])
+sum()
+```
+
